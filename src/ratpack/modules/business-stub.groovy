@@ -39,6 +39,7 @@ ratpack {
 				if ( !time ) throw new MetaException(Error.MISSING_TIME, meta)
 
 				Blocking.get {
+					println "[SWISSARMYKNIFE - SLEEP] Incoming request to sleep for ${time}"
 					sleep new TimeLapse(time).ms() as long
 				}
 				.then {

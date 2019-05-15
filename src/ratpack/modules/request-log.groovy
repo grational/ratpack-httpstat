@@ -10,6 +10,22 @@ import ratpack.handling.RequestLogger
 
 ratpack {
 	handlers {
-		all(RequestLogger.ncsa())
+		// Here we use the of method to implement
+		// custom request logging.
+		all(RequestLogger.of { outcome ->
+			// Only log when logger is enabled.
+			if (RequestLogger.LOGGER.infoEnabled) {
+				// Log how long the request handling took.
+				RequestLogger.LOGGER.info (
+					'{} "{} {} {}" served in {}.{} seconds.',
+					outcome.request.timestamp,
+					outcome.request.method,
+					outcome.request.rawUri,
+					outcome.request.protocol,
+					outcome.duration.seconds,
+					outcome.duration.nano
+				)
+			}
+		})
 	}
 }

@@ -14,10 +14,11 @@ plugins {
 
 // [general] configuration
 project.ext {
-	groovyVersion = '2.5.7'
-	gradleVersion = '5.4.1'
-	spockVersion  = '1.3-groovy-2.4'
-	slf4jVersion  = '1.7.26'
+	groovyVersion        = '2.5.7'
+	gradleVersion        = '5.4.1'
+	spockVersion         = '1.3-groovy-2.4'
+	slf4jVersion         = '1.7.26'
+	timeDecoratorVersion = 'release-0.2.1'
 	wrapper.gradleVersion "$gradleVersion"
 }
 
@@ -44,8 +45,8 @@ repositories {
 dependencies {
 	// Slf4j dependencies to print out to the console
 	implementation (
-		"org.slf4j:slf4j-nop:$slf4jVersion",
-		"com.github.grational:time-decorators:release-0.2.1"
+		"org.slf4j:slf4j-simple:$slf4jVersion",
+		"com.github.grational:time-decorators:$timeDecoratorVersion"
 	)
 
 	// We use the awesome Spock testing and specification framework
