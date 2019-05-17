@@ -11,49 +11,64 @@ import ratpack.exec.Blocking
 import groovy.json.JsonBuilder
 import it.italiaonline.rnd.time.TimeLapse
 // internal
-import it.italiaonline.rnd.response.Meta
-import it.italiaonline.rnd.response.exceptions.Error
-import it.italiaonline.rnd.response.exceptions.MetaException
+import it.italiaonline.rnd.ratpack.response.Meta
+import it.italiaonline.rnd.ratpack.exceptions.Error
+import it.italiaonline.rnd.ratpack.exceptions.MetaException
+import it.italiaonline.rnd.http.Code
 
 ratpack {
 	handlers {
-		prefix('v1/swissarmyknife') {
-			get('sleep/:time') {
+		prefix('v1') {
+			get('httpstat/:code') {
 				// request ids
 				def requestData = [
-					id: get(RequestId).toString(),
+					id:   get(RequestId).toString(),
 					path: get(Request).path,
-					qparams: request.queryParams
+					qp:   request.queryParams
 				]
 				// build the json meta section
 				def meta = new Meta (
 					uuid:    requestData.id,
 					path:    requestData.path,
-					qparams: requestData.qparams,
+					qparams: requestData.qp,
 					body:    [:]
 				)
+				def code, time
 				// path params
-				def time = pathTokens.time
-
-				// check compulsory input paramters
-				if ( !time ) throw new MetaException(Error.MISSING_TIME, meta)
+				try { code = new Code(pathTokens.code) }
+					catch (e) {
+						println e.message
+						throw new MetaException(Error.INVALID_CODE, meta) 
+					}
+				// query params
+				try { time = requestData.qp.sleep }
+					catch (e) { throw new MetaException(Error.INVALID_TIME, meta) }
 
 				Blocking.get {
-					println "[SWISSARMYKNIFE - SLEEP] Incoming request to sleep for ${time}"
-					sleep new TimeLapse(time).ms() as long
+					println "[HTTPSTAT] Emulating a http request with return code ${code.number()} to sleep for ${time}"
+					sleep(new TimeLapse(time).ms() as long)
 				}
 				.then {
-					def result = meta.map() + [
-						data: [
-							slept: time
-						]
-					]
+					response.status(code.number())
 					response.send (
 						'application/json',
-						new JsonBuilder(result).toString()
-					)
-				}
-			}
+						new JsonBuilder(
+							meta.map() + [
+								data: [
+									http: [
+										response: [
+											code: code.number(),
+											description: code.description(),
+											time: time
+										]
+									]
+								]
+							]
+						).toString()
+					) // response.send
+				} // then
+			} // get('httpstat/:code')
+
 		}
 	}
 }

@@ -1,4 +1,4 @@
-package it.italiaonline.rnd.response
+package it.italiaonline.rnd.ratpack.response
 
 class Meta {
 	private final String uuid

@@ -1,4 +1,4 @@
-package it.italiaonline.rnd.response.exceptions
+package it.italiaonline.rnd.ratpack.exceptions
 
 import groovy.json.JsonBuilder
 

@@ -1,8 +1,13 @@
-package it.italiaonline.rnd.response.exceptions
+package it.italiaonline.rnd.ratpack.exceptions
 
 enum Error {
-	MISSING_TIME {
+	INVALID_CODE {
 		@Override Integer getCode()    { 1 }
+		@Override String  getType()    { 'ERROR' }
+		@Override String  getMessage() { "The http status code path parameter is invalid" }
+	},
+	MISSING_TIME {
+		@Override Integer getCode()    { 2 }
 		@Override String  getType()    { 'ERROR' }
 		@Override String  getMessage() { "The time parameter is missing in the path" }
 	},

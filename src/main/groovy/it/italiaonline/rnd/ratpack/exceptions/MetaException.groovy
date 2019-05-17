@@ -1,8 +1,8 @@
-package it.italiaonline.rnd.response.exceptions
+package it.italiaonline.rnd.ratpack.exceptions
 
 import groovy.json.JsonBuilder
-import it.italiaonline.rnd.response.Meta
-import it.italiaonline.rnd.response.exceptions.Error
+import it.italiaonline.rnd.ratpack.response.Meta
+import it.italiaonline.rnd.ratpack.exceptions.Error
 
 final class MetaException extends RuntimeException implements RestException {
 	final private Error  error

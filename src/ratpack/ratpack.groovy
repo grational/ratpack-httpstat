@@ -9,6 +9,9 @@ ratpack {
 	// cors headers
 	include 'modules/cors.groovy'
 
+	// error handling
+	include 'modules/error-handler.groovy'
+
 	// external file conf
 	include 'modules/server-config.groovy'
 
